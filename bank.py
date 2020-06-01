@@ -1,25 +1,31 @@
+import pandas as pd
+from datetime import date
 import numpy as np
 
 
-class bank_account:
+class bank_account(object):
     """
     Deposit in any denomination.
     Balance in ZAR
     Withdraw in any denomination in your choice.
     """
-    currency = {
-        "UG": 255.15,
-        "TZ": 160.03,
-        "KES": 7.00,
-        "ZAR": 1
-    }
+    c = {}
+    base_currency = "ZAR"
+    currency_ = c
+    date_ = date.today()
+    dfs= (pd.read_html("https://www.xe.com/currencytables/?from={}&date={}".format(base_currency,date_))[0]
+         .rename(columns={"Currency code  ▲▼":"Currency code","Currency name  ▲▼":"Currency name"}))
+    #currency = {self.base_currency:list(required["Units per {}".format(base_currency)])[0]}
+    currency1 = dict(zip(dfs["Currency code"], dfs["Units per {}".format(base_currency)]))
+    currency = currency1
+    
 
     def __init__(self):
         self.balance = 0
         self.to = 0
         self.fromm = 0
-        c = {}
-
+        self.currency_from = ""
+        self.currency_to = ""
     def open_account(self):
         def account_number_gen():
             accs = []
@@ -104,29 +110,41 @@ class bank_account:
                 print("{} : {}".format(n, line.strip()))
                 line = fp.readline()
                 n = n + 1
-
+    def currency_codes(self):
+        print(sorted(self.dfs["Currency code"]))
     def currency_selection(self):
         print("SELECT THE CURRENCY BELOW: ")
-        print("1: UG")
+        print("1: UGX")
         print("2: TZ")
         print("3: ZAR")
         print("4: KES")
+        print("5: Other(Specify the currency code)")
+        print("6: Not sure of the country code? enter 6 to see all the codes.")
         deno = int(input("Select the currency: "))
         if deno == 1:
-            c = "UG"
-            return (c)
+            c = "UGX"
+            return c
         elif deno == 2:
-            c = "TZ"
-            return (c)
+            c = "TZS"
+            return c
         elif deno == 3:
             c = "ZAR"
-            return (c)
+            return c
         elif deno == 4:
             c = "KES"
-            return (c)
+            return c
+        elif deno == 5:
+            c = input("Enter the currency code: ")
+            return c
+        elif deno == 6:
+            print(self.currency_codes())
+            print(20*"#")
+            c = input("Enter the code below:")
+            print(20*"#")
+            return c
         else:
             print("The selected currency is not available. Please try again.")
-            return (self.currency_selection())
+            return currency_selection()
 
     def bal(self):
         q = open("ac.txt", "r")
@@ -237,7 +255,34 @@ class bank_account:
     def convert_from(self, amount, rate):
         self.fromm = amount * rate
         return (self.fromm)
-
+    @staticmethod
+    def currency_conversion():
+        print("1: Historical")
+        print("2: Current exchange rates")
+        t = eval(input("Choose: 1 for Historical or 2 for current. Default current."))
+        if t ==1: 
+            print("Enter the currency you wish to compare and date in the format(YYYY-MM-DD) below separated by #")
+            print("Example: USD#CAD#2020-06-01")
+            cc = list(map(str,input().strip().split("#")))
+            #date_= datetime.strptime(cc[2],'%Y-%m-%d').date()
+            dffs= (pd.read_html("https://www.xe.com/currencytables/?from={}&date={}".format(cc[0],cc[2]))[0]
+         .rename(columns={"Currency code  ▲▼":"Currency code","Currency name  ▲▼":"Currency name"}))
+            required = dffs[dffs["Currency code"]==cc[1]]
+            print(50*"-")
+            print("Date:",cc[2])
+            print(required)
+        else:
+            print("Enter the currency you wish to compare and date in the format(YYYY-MM-DD) below separated by #")
+            print("Example: USD#CAD")
+            cc = list(map(str,input().strip().split("#")))
+            date_ = date.today()
+            dffs= (pd.read_html("https://www.xe.com/currencytables/?from={}&date={}".format(cc[0],date_))[0]
+         .rename(columns={"Currency code  ▲▼":"Currency code","Currency name  ▲▼":"Currency name"}))
+            required = dffs[dffs["Currency code"]==cc[1]]
+            print(50*"-")
+            print("Date:",date_)
+            print(required)
+        
     def clear_account(self):
         print("Are you sure you want to clear the account? If yes, input the account number.")
         ac_check = int(input("Enter the account number: "))
@@ -313,5 +358,6 @@ class bank_account:
         print("5: Search for an account")
         print("6: Clear an account (Withdraw all the amount and set account bal to 0)")
         print("7: Close an account (Withdraw all the amount and delete account)")
-        print("8: Quit")
+        print("8: Currency Conversion")
+        print("9: Quit")
 
