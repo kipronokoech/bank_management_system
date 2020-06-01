@@ -9,4 +9,8 @@ The repository contains the following files:
 4. `ac.txt` - is a text file keeping all details for the account holders. Every line of the file is an individual entry.
 
 # TO-DO:
-To have exchange rates collected live from the web and also to be able to access historical exchange rates.
+[] Support all the currencies (Currently supporting 5 currencies)
+[] Allow he user to choose base currency. Currently the base currency is fixed.
+[] To have exchange rates collected live from the web
+[] Be able to access historical exchange rates.
+
