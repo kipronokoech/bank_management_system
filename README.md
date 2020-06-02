@@ -11,7 +11,7 @@ The repository contains the following files:
 # TO-DO:
 - [x] Support all the currencies (Currently supporting 5 currencies)
 
-- [ ] Allow he user to choose base currency. Currently the base currency is fixed.
+- [ ] Allow the user to choose base currency. Currently the base currency is fixed.
 
 - [x] To have exchange rates collected live from the web
 
