@@ -1,5 +1,5 @@
 import pandas as pd
-from datetime import date
+from datetime import date,timedelta
 import numpy as np
 
 
@@ -12,12 +12,21 @@ class bank_account(object):
     c = {}
     base_currency = "ZAR"
     currency_ = c
-    date_ = date.today()
-    dfs= (pd.read_html("https://www.xe.com/currencytables/?from={}&date={}".format(base_currency,date_))[0]
-         .rename(columns={"Currency code  ▲▼":"Currency code","Currency name  ▲▼":"Currency name"}))
-    #currency = {self.base_currency:list(required["Units per {}".format(base_currency)])[0]}
-    currency1 = dict(zip(dfs["Currency code"], dfs["Units per {}".format(base_currency)]))
-    currency = currency1
+    try:
+        date_ = date.today()
+        dfs= (pd.read_html("https://www.xe.com/currencytables/?from={}&date={}".format(base_currency,date_))[0]
+             .rename(columns={"Currency code  ▲▼":"Currency code","Currency name  ▲▼":"Currency name"}))
+        #currency = {self.base_currency:list(required["Units per {}".format(base_currency)])[0]}
+        currency1 = dict(zip(dfs["Currency code"], dfs["Units per {}".format(base_currency)]))
+        currency = currency1
+    except KeyError as s:
+        print("Date out of range. Displaying the results for current day.")
+        date_ = date.today()-timedelta(1)
+        dfs = (pd.read_html("https://www.xe.com/currencytables/?from={}&date={}".format(base_currency, date_))[0]
+               .rename(columns={"Currency code  ▲▼": "Currency code", "Currency name  ▲▼": "Currency name"}))
+        # currency = {self.base_currency:list(required["Units per {}".format(base_currency)])[0]}
+        currency1 = dict(zip(dfs["Currency code"], dfs["Units per {}".format(base_currency)]))
+        currency = currency1
     
 
     def __init__(self):
