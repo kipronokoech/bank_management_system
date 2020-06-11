@@ -153,7 +153,7 @@ class bank_account(object):
             return c
         else:
             print("The selected currency is not available. Please try again.")
-            return currency_selection()
+            return self.currency_selection()
 
     def bal(self):
         q = open("ac.txt", "r")

@@ -1,4 +1,4 @@
-#Calling the bank_account class on bank.py
+# Calling the bank_account class on bank.py
 from bank import bank_account
 
 bank_account = bank_account()
@@ -60,5 +60,3 @@ while True:
         # Give an invalid selection alert and allow the user to input the selection again.
         print("Invalid selection")
         print(50 * "#")
-
-
