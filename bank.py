@@ -1,5 +1,5 @@
 import pandas as pd
-from datetime import date,timedelta
+from datetime import date, timedelta
 import numpy as np
 
 
@@ -14,20 +14,19 @@ class bank_account(object):
     currency_ = c
     try:
         date_ = date.today()
-        dfs= (pd.read_html("https://www.xe.com/currencytables/?from={}&date={}".format(base_currency,date_))[0]
-             .rename(columns={"Currency code  ▲▼":"Currency code","Currency name  ▲▼":"Currency name"}))
-        #currency = {self.base_currency:list(required["Units per {}".format(base_currency)])[0]}
-        currency1 = dict(zip(dfs["Currency code"], dfs["Units per {}".format(base_currency)]))
-        currency = currency1
-    except KeyError as s:
-        print("Date out of range. Displaying the results for current day.")
-        date_ = date.today()-timedelta(1)
         dfs = (pd.read_html("https://www.xe.com/currencytables/?from={}&date={}".format(base_currency, date_))[0]
                .rename(columns={"Currency code  ▲▼": "Currency code", "Currency name  ▲▼": "Currency name"}))
         # currency = {self.base_currency:list(required["Units per {}".format(base_currency)])[0]}
         currency1 = dict(zip(dfs["Currency code"], dfs["Units per {}".format(base_currency)]))
         currency = currency1
-    
+    except KeyError as s:
+        print("Date out of range. Displaying the results for current day.")
+        date_ = date.today() - timedelta(1)
+        dfs = (pd.read_html("https://www.xe.com/currencytables/?from={}&date={}".format(base_currency, date_))[0]
+               .rename(columns={"Currency code  ▲▼": "Currency code", "Currency name  ▲▼": "Currency name"}))
+        # currency = {self.base_currency:list(required["Units per {}".format(base_currency)])[0]}
+        currency1 = dict(zip(dfs["Currency code"], dfs["Units per {}".format(base_currency)]))
+        currency = currency1
 
     def __init__(self):
         self.balance = 0
@@ -35,6 +34,7 @@ class bank_account(object):
         self.fromm = 0
         self.currency_from = ""
         self.currency_to = ""
+
     def open_account(self):
         def account_number_gen():
             accs = []
@@ -44,13 +44,13 @@ class bank_account(object):
                         value = line.split()
                         accs.append(int(value[0]))
             except FileNotFoundError as s:
-                f = open("ac.txt","w+")
+                f = open("ac.txt", "w+")
                 f.close()
             if not accs:
                 ac = 140000000
             else:
                 ac = np.max(accs) + 1
-            return (ac)
+            return ac
 
         first = input("Enter your first name: ")
         last = input("Enter your last name: ")
@@ -69,7 +69,7 @@ class bank_account(object):
             fp.write("{}{}{}{}{}{}{}\n".format(ac, " ", last, " ", first, " ", np.round(self.balance, 2)))
         print("Your details have been saved as follows: \n\n")
         print(60 * "#")
-        print("\t\t", ac, last, first, np.round(self.balance,2))
+        print("\t\t", ac, last, first, np.round(self.balance, 2))
         print(60 * "#")
 
     def account_number_check(self, ac_):
@@ -79,9 +79,9 @@ class bank_account(object):
                 value = line.split()
                 account_numbers.append(value[0])
         if str(ac_) in account_numbers:
-            return ("exists")
+            return "exists"
         else:
-            return ("does_not_exist")
+            return "does_not_exist"
 
     def display_ac(self):
         ac_check = int(input("Enter the Account number: "))
@@ -110,7 +110,8 @@ class bank_account(object):
                 # Todo: enter service selection here
                 pass
 
-    def display_all(self):
+    @staticmethod
+    def display_all():
         file = 'ac.txt'
         n = 1
         with open(file) as fp:
@@ -119,8 +120,10 @@ class bank_account(object):
                 print("{} : {}".format(n, line.strip()))
                 line = fp.readline()
                 n = n + 1
+
     def currency_codes(self):
         print(sorted(self.dfs["Currency code"]))
+
     def currency_selection(self):
         print("SELECT THE CURRENCY BELOW: ")
         print("1: UGX")
@@ -147,9 +150,9 @@ class bank_account(object):
             return c
         elif deno == 6:
             print(self.currency_codes())
-            print(20*"#")
+            print(20 * "#")
             c = input("Enter the code below:")
-            print(20*"#")
+            print(20 * "#")
             return c
         else:
             print("The selected currency is not available. Please try again.")
@@ -169,8 +172,7 @@ class bank_account(object):
                     print(15 * "#", "MORE ACCOUNT DETAILS", 15 * "#")
                     print(i)
                     print(50 * "#")
-                    values[0]
-                    return (self.balance)
+                    return self.balance
                 else:
                     pass
             break
@@ -258,40 +260,39 @@ class bank_account(object):
 
     def convert_to(self, amount, rate):
         self.to = amount / rate
-        return (self.to)
-        print("Your balance is: R", round(self.balance, 2))
+        return self.to
 
     def convert_from(self, amount, rate):
         self.fromm = amount * rate
-        return (self.fromm)
+        return self.fromm
+
     @staticmethod
     def currency_conversion():
         print("1: Historical")
         print("2: Current exchange rates")
         t = eval(input("Choose: 1 for Historical or 2 for current. Default current."))
-        if t ==1: 
+        if t == 1:
             print("Enter the currency you wish to compare and date in the format(YYYY-MM-DD) below separated by #")
             print("Example: USD#CAD#2020-06-01")
-            cc = list(map(str,input().strip().split("#")))
-            #date_= datetime.strptime(cc[2],'%Y-%m-%d').date()
-            dffs= (pd.read_html("https://www.xe.com/currencytables/?from={}&date={}".format(cc[0],cc[2]))[0]
-         .rename(columns={"Currency code  ▲▼":"Currency code","Currency name  ▲▼":"Currency name"}))
-            required = dffs[dffs["Currency code"]==cc[1]]
-            print(50*"-")
-            print("Date:",cc[2])
+            cc = list(map(str, input().strip().split("#")))
+            dffs = (pd.read_html("https://www.xe.com/currencytables/?from={}&date={}".format(cc[0], cc[2]))[0]
+                    .rename(columns={"Currency code  ▲▼": "Currency code", "Currency name  ▲▼": "Currency name"}))
+            required = dffs[dffs["Currency code"] == cc[1]]
+            print(50 * "-")
+            print("Date:", cc[2])
             print(required)
         else:
             print("Enter the currency you wish to compare and date in the format(YYYY-MM-DD) below separated by #")
             print("Example: USD#CAD")
-            cc = list(map(str,input().strip().split("#")))
+            cc = list(map(str, input().strip().split("#")))
             date_ = date.today()
-            dffs= (pd.read_html("https://www.xe.com/currencytables/?from={}&date={}".format(cc[0],date_))[0]
-         .rename(columns={"Currency code  ▲▼":"Currency code","Currency name  ▲▼":"Currency name"}))
-            required = dffs[dffs["Currency code"]==cc[1]]
-            print(50*"-")
-            print("Date:",date_)
+            dffs = (pd.read_html("https://www.xe.com/currencytables/?from={}&date={}".format(cc[0], date_))[0]
+                    .rename(columns={"Currency code  ▲▼": "Currency code", "Currency name  ▲▼": "Currency name"}))
+            required = dffs[dffs["Currency code"] == cc[1]]
+            print(50 * "-")
+            print("Date:", date_)
             print(required)
-        
+
     def clear_account(self):
         print("Are you sure you want to clear the account? If yes, input the account number.")
         ac_check = int(input("Enter the account number: "))
@@ -369,4 +370,3 @@ class bank_account(object):
         print("7: Close an account (Withdraw all the amount and delete account)")
         print("8: Currency Conversion")
         print("9: Quit")
-
