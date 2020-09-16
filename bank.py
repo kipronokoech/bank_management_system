@@ -266,8 +266,7 @@ class bank_account(object):
         self.fromm = amount * rate
         return self.fromm
 
-    @staticmethod
-    def currency_conversion():
+    def exchange_rates(self):
         print("1: Historical")
         print("2: Current exchange rates")
         t = eval(input("Choose: 1 for Historical or 2 for current. Default current."))
@@ -282,7 +281,7 @@ class bank_account(object):
             print("Date:", cc[2])
             print(required)
         else:
-            print("Enter the currency you wish to compare and date in the format(YYYY-MM-DD) below separated by #")
+            print("Enter the currency you wish to compare below separated by #")
             print("Example: USD#CAD")
             cc = list(map(str, input().strip().split("#")))
             date_ = date.today()
@@ -293,6 +292,34 @@ class bank_account(object):
             print("Date:", date_)
             print(required)
 
+    # def CurrencyConversion(self):
+    #     print("1: Using Historical Rates")
+    #     print("2: Using Current Rates")
+    #     t = eval(input("Choose: 1 for historical or 2 for current rates. Default: current."))
+    #     if t == 1:
+    #         amount = print("Enter the amount and currency: eg (1000#USD) ")
+    #         print("Enter the currency you wish to compare and date in the format(YYYY-MM-DD) below separated by #")
+    #         print("Example: USD#CAD#2020-06-01")
+    #         cc = list(map(str, input().strip().split("#")))
+    #         dffs = (pd.read_html("https://www.xe.com/currencytables/?from={}&date={}".format(cc[0], cc[2]))[0]
+    #                 .rename(columns={"Currency code  ▲▼": "Currency code", "Currency name  ▲▼": "Currency name"}))
+    #         required = dffs[dffs["Currency code"] == cc[1]]
+    #         print(50 * "-")
+    #         print("Date:", cc[2])
+    #         print(required)
+    #         return required
+    #     else:
+    #         print("Enter the currency you wish to compare below separated by #")
+    #         print("Example: USD#CAD")
+    #         cc = list(map(str, input().strip().split("#")))
+    #         date_ = date.today()
+    #         dffs = (pd.read_html("https://www.xe.com/currencytables/?from={}&date={}".format(cc[0], date_))[0]
+    #                 .rename(columns={"Currency code  ▲▼": "Currency code", "Currency name  ▲▼": "Currency name"}))
+    #         required = dffs[dffs["Currency code"] == cc[1]]
+    #         print(50 * "-")
+    #         print("Date:", date_)
+    #         print(required)
+    #         return required
     def clear_account(self):
         print("Are you sure you want to clear the account? If yes, input the account number.")
         ac_check = int(input("Enter the account number: "))
@@ -368,5 +395,5 @@ class bank_account(object):
         print("5: Search for an account")
         print("6: Clear an account (Withdraw all the amount and set account bal to 0)")
         print("7: Close an account (Withdraw all the amount and delete account)")
-        print("8: Currency Conversion")
+        print("8: Exchange Rates")
         print("9: Quit")
