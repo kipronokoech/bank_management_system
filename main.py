@@ -48,7 +48,7 @@ while True:
         print(50 * "#")
         bank_account.services_offered()
     elif option == 8:
-        bank_account.exchange_rates()
+        bank_account.currency_conversion()
         print(50 * "#")
         bank_account.services_offered()
     elif option == 9:

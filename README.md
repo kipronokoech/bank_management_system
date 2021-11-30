@@ -1,5 +1,5 @@
 # bank_management_system
-This is a bank management system which included currency exchange. The project's main focus is to enhance understanding of Object Oriented Programming in Python, understanding of Files I/O and enhancing the skill of problem solving.
+This is a bank management system which included currency exchange. The project's main focus is to enhance understanding of Object Oriented Programming in Python and better understanding of Files I/O.
 
 # Root dir - Files
 The repository contains the following files:
