@@ -9,6 +9,7 @@ class bank_account(object):
     Balance in ZAR
     Withdraw in any denomination in your choice.
     """
+
     c = {}
     base_currency = "ZAR"
     currency_ = c
@@ -18,15 +19,14 @@ class bank_account(object):
         url = "https://www.xe.com/currencytables/?from={}&date={}".format(base_currency, date_)
         print(url)
         dfs = pd.read_html(url)[0]
-        # currency = {self.base_currency:list(required["Units per {}".format(base_currency)])[0]}
         currency1 = dict(zip(dfs["Currency"], dfs["Units per {}".format(base_currency)]))
         currency = currency1
     except KeyError as s:
-        print("Date out of range. Displaying the results for current day.")
-        date_ = date.today() - timedelta(1)
+        print("Date out of range. Using the rates from yesterday.")
+        date_ = date.today() - timedelta(2)
         dfs = pd.read_html("https://www.xe.com/currencytables/?from={}&date={}".format(base_currency, date_))[0]
         print(dfs.columns)
-        # currency = {self.base_currency:list(required["Units per {}".format(base_currency)])[0]}
+        print(dfs)
         currency1 = dict(zip(dfs["Currency"], dfs["Units per {}".format(base_currency)]))
         currency = currency1
 
@@ -226,8 +226,6 @@ class bank_account(object):
         if self.account_number_check(ac_check) == "exists" and (balance - ww) >= 0:
             with open("ac.txt", "r") as fp:
                 lines = fp.readlines()
-                # print(lines)
-            # check the account in question, read the values and delete it
             with open("ac.txt", "w") as fp:
                 for line in lines:
                     if str(ac_check) in line.strip("\n"):
