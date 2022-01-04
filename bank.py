@@ -7,7 +7,7 @@ class bank_account(object):
     """
     Deposit in any denomination.
     Balance in ZAR
-    Withdraw in any denomination in your choice.
+    Withdraw in any denomination of your choice.
     """
 
     c = {}
