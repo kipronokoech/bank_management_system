@@ -1,7 +1,7 @@
 import pandas as pd
 from datetime import date, timedelta
 import numpy as np
-
+import json
 
 class bank_account(object):
     """
@@ -114,6 +114,7 @@ class bank_account(object):
 
     @staticmethod
     def display_all():
+        print("Note: All accounts are in the base currency, that is, ZAR.")
         file = 'ac.txt'
         n = 1
         with open(file) as fp:
@@ -124,7 +125,8 @@ class bank_account(object):
                 n = n + 1
 
     def currency_codes(self):
-        print(sorted(self.dfs["Currency"]))
+        codes = dict(zip(self.dfs["Currency"],self.dfs["Name"]))
+        print(json.dumps(codes, indent=3))
 
     def currency_selection(self):
         print("SELECT THE CURRENCY BELOW: ")
