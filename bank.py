@@ -124,9 +124,11 @@ class bank_account(object):
                 line = fp.readline()
                 n = n + 1
 
-    def currency_codes(self):
+    def currency_codes(self, display=True):
         codes = dict(zip(self.dfs["Currency"],self.dfs["Name"]))
-        print(json.dumps(codes, indent=3))
+        if display:
+            print(json.dumps(codes, indent=3))
+        return codes
 
     def currency_selection(self):
         print("SELECT THE CURRENCY BELOW: ")
@@ -135,29 +137,31 @@ class bank_account(object):
         print("3: ZAR")
         print("4: KES")
         print("5: Other(Specify the currency code)")
-        print("6: Not sure of the country code? enter 6 to see all the codes.")
-        deno = int(input("Select the currency: "))
-        if deno == 1:
+        print("6: Not sure of the country code? press 6 to see all the codes.")
+        deno = input("Select the currency:").strip()
+        if deno in ["1", "UGX"]:
             c = "UGX"
             return c
-        elif deno == 2:
+        elif deno in ["2", "TZS"]:
             c = "TZS"
             return c
-        elif deno == 3:
+        elif deno in ["3", "ZAR"]:
             c = "ZAR"
             return c
-        elif deno == 4:
+        elif deno in ["4", "KES"]:
             c = "KES"
             return c
-        elif deno == 5:
+        elif deno in ["5"]:
             c = input("Enter the currency code: ")
             return c
-        elif deno == 6:
+        elif deno == "6":
             print(self.currency_codes())
             print(20 * "#")
             c = input("Enter the code below:")
             print(20 * "#")
             return c
+        elif deno in self.currency_codes(display=False):
+            return deno
         else:
             print("The selected currency is not available. Please try again.")
             return self.currency_selection()
